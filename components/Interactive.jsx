@@ -120,8 +120,6 @@ export default function Interactive() {
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
         if (job.job.statuses.some((d) => d.status === "SUCCESS")) {
-          // Wait for 3000ms to allow the images to be generated
-          await sleep(3000);
           const output = await vanaApiGet("generations/images", {
             exhibitName: "Learn Prompt Engineering",
           });
@@ -253,8 +251,8 @@ export default function Interactive() {
         Upload an image of your desired style. Then, create a brand new portrait
         of yourself (or {DEFAULT_PERSON}) in this style!
       </h2>
-      <LoginHandler setUser={setUser} />
-      <button onClick={generatePersonalizedImages}>test</button>
+      {/* <LoginHandler setUser={setUser} />
+      <button onClick={generatePersonalizedImages}>test</button> */}
       <div className="image-uploader-form text-center">
         {!imageUrl && (
           <>
