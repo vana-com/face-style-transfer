@@ -381,7 +381,7 @@ export default function Interactive() {
 
                 {imageCaption &&
                 prediction.status == "succeeded" &&
-                generatedImages?.data?.length > 0 ? (
+                generatedImages?.length > 0 ? (
                   <>
                     <img
                       src={
@@ -397,7 +397,7 @@ export default function Interactive() {
                       }}
                     />
                     <div className="mt-2 flex flex-row gap-1">
-                      {generatedImages?.data?.map((image, i) => (
+                      {generatedImages?.map((image, i) => (
                         <div
                           className={classNames(
                             "flex-1 aspect-square cursor-pointer hover:scale-105 transition hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 rounded overflow-hidden",
