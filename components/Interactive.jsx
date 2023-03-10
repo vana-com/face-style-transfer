@@ -243,9 +243,8 @@ export default function Interactive() {
           return;
         }
       }
-      const formattedUrls = {
-        data: multi.output.map((imageUrl) => ({ url: imageUrl })),
-      };
+
+      const formattedUrls = multi.output.map((imageUrl) => ({ url: imageUrl }));
       setGeneratedImages(formattedUrls);
       setIsLoading(false);
     },
@@ -421,9 +420,7 @@ export default function Interactive() {
                 generatedImages?.length > 0 ? (
                   <>
                     <img
-                      src={
-                        selectedGeneratedImage || generatedImages?.data[0].url
-                      }
+                      src={selectedGeneratedImage || generatedImages[0].url}
                       alt="Uploaded Image"
                       layout="position"
                       className={classNames(
