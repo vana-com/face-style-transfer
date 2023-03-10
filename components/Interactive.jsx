@@ -143,15 +143,26 @@ export default function Interactive() {
         });
         console.log("generations", generations);
 
-        // if (generations.success) {
-        const output = await vanaApiGet("generations/images", {
-          exhibitName: "Learn Prompt Engineering",
-        });
-        const urls = output.exhibits
-          .find((d) => d.name === "Learn Prompt Engineering")
-          .images.map((d) => ({ url: d.url }));
-        console.log("urls", urls);
-        setGeneratedImages(urls);
+        // Polling for the status of the generation job
+        // Every 1000 seconds, hit 'jobs' endpoint to check the status of the job
+        // Once the job is complete, hit 'generations/images' endpoint to get the images
+        // Once we have the images, we can display them on the page
+        let job = await vanaApiGet(`jobs/${generations.jobId}`);
+        while (!job.success) {
+          await sleep(1000);
+          job = await vanaApiGet(`jobs/${generations.jobId}`);
+        }
+
+        if (job.success) {
+          const output = await vanaApiGet("generations/images", {
+            exhibitName: "Learn Prompt Engineering",
+          });
+          const urls = output.exhibits
+            .find((d) => d.name === "Learn Prompt Engineering")
+            .images.map((d) => ({ url: d.url }));
+          console.log("urls", urls);
+          setGeneratedImages(urls);
+        }
       }
     } catch (error) {
       setErrorMessage("An error occurred while generating the image");
