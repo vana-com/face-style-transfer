@@ -85,10 +85,11 @@ export default function Interactive() {
     setIsLoading(true);
     setErrorMessage("");
 
-    const TESTING_PROMPT =
-      "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
+    // const TESTING_PROMPT =
+    //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
 
-    const targetTokenPrompt = TESTING_PROMPT.replace(/\[your subject]/g, "<1>")
+    const targetTokenPrompt = prompt
+      .replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
       .trim();
 
