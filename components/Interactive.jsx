@@ -122,6 +122,9 @@ export default function Interactive() {
     setIsLoading(true);
     setErrorMessage("");
 
+    // const TESTING_PROMPT =
+    //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
+
     const targetTokenPrompt = prompt
       .replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
@@ -163,7 +166,6 @@ export default function Interactive() {
     console.log("Running image", images[0].fileUrl);
     setImageUrl(images[0].fileUrl);
 
-    console.log("going to make prediction", process.env.REPLICATE_API_TOKEN);
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
@@ -272,8 +274,8 @@ export default function Interactive() {
         Upload an image of your desired style. Then, create a brand new portrait
         of yourself (or {DEFAULT_PERSON}) in this style!
       </h2>
-      {/* <LoginHandler setUser={setUser} />
-      <button onClick={generatePersonalizedImages}>test</button> */}
+      <LoginHandler setUser={setUser} />
+      <button onClick={generatePersonalizedImages}>test</button>
       <div className="image-uploader-form text-center">
         {!imageUrl && (
           <>
@@ -431,7 +433,7 @@ export default function Interactive() {
                       }}
                     />
                     <div className="mt-2 flex flex-row gap-1">
-                      {generatedImages?.map((image, i) => (
+                      {generatedImages?.slice(0, 4).map((image, i) => (
                         <div
                           className={classNames(
                             "flex-1 aspect-square cursor-pointer hover:scale-105 transition hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 rounded overflow-hidden",
