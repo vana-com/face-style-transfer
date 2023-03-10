@@ -104,12 +104,13 @@ export default function Interactive() {
         console.log("generations", generations);
 
         // if (generations.success) {
-        const outputs = await vanaApiGet("generations/images", {
+        const output = await vanaApiGet("generations/images", {
           exhibitName: "Learn Prompt Engineering",
         });
-        const urls = outputs.exhibits
+        const urls = output.exhibits
           .find((d) => d.name === "Learn Prompt Engineering")
-          .images.map((d) => d.url);
+          .images.map((d) => ({ url: d.url }));
+        console.log("urls", urls);
         setGeneratedImages(urls);
       }
     } catch (error) {
