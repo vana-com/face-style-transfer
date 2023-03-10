@@ -110,14 +110,14 @@ export default function Interactive() {
         // Every 1000 seconds, hit 'jobs' endpoint to check the status of the job
         let job = await vanaApiGet(`jobs/${generations.jobId}`);
         console.log("job", job);
-        while (!job.statuses.any((d) => d === "SUCCESS")) {
+        while (!job.statuses.any((d) => d.status === "SUCCESS")) {
           await sleep(1000);
           job = await vanaApiGet(`jobs/${generations.jobId}`);
           console.log("job", job);
         }
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
-        if (job.statuses.any((d) => d === "SUCCESS")) {
+        if (job.statuses.any((d) => d.status === "SUCCESS")) {
           const output = await vanaApiGet("generations/images", {
             exhibitName: "Learn Prompt Engineering",
           });
