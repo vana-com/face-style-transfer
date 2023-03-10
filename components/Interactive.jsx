@@ -85,11 +85,10 @@ export default function Interactive() {
     setIsLoading(true);
     setErrorMessage("");
 
-    // const TESTING_PROMPT =
-    //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
+    const TESTING_PROMPT =
+      "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
 
-    const targetTokenPrompt = prompt
-      .replace(/\[your subject]/g, "<1>")
+    const targetTokenPrompt = TESTING_PROMPT.replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
       .trim();
 
@@ -109,21 +108,17 @@ export default function Interactive() {
         // Polling for the status of the generation job
         // Every 1000 seconds, hit 'jobs' endpoint to check the status of the job
         let job = await vanaApiGet(`jobs/${generations.jobId}`);
-        console.log(
-          "job",
-          job?.statuses?.any((d) => d.status === "SUCCESS")
-        );
-        while (!job?.statuses?.any((d) => d.status === "SUCCESS")) {
+        while (!job.job.statuses?.some((d) => d.status === "SUCCESS")) {
           await sleep(1000);
           job = await vanaApiGet(`jobs/${generations.jobId}`);
           console.log(
-            "job",
-            job.statuses.map((d) => d.status)
+            "Has finished job:",
+            job.job.statuses.map((d) => d.status).some((d) => d === "SUCCESS")
           );
         }
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
-        if (job.statuses.any((d) => d.status === "SUCCESS")) {
+        if (job.job.statuses.some((d) => d.status === "SUCCESS")) {
           const output = await vanaApiGet("generations/images", {
             exhibitName: "Learn Prompt Engineering",
           });
