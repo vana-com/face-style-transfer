@@ -119,6 +119,8 @@ export default function Interactive() {
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
         if (job.job.statuses.some((d) => d.status === "SUCCESS")) {
+          // Wait for 3000ms to allow the images to be generated
+          await sleep(3000);
           const output = await vanaApiGet("generations/images", {
             exhibitName: "Learn Prompt Engineering",
           });
