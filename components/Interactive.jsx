@@ -107,16 +107,11 @@ export default function Interactive() {
         const outputs = await vanaApiGet("generations/images", {
           exhibitName: "Learn Prompt Engineering",
         });
-        const urls = outputs
+        const urls = outputs.exhibits
           .find((d) => d.name === "Learn Prompt Engineering")
           .images.map((d) => d.url);
         setGeneratedImages(urls);
       }
-
-      // try {
-      // const exhibits = await vanaApiGet("account/exhibits");
-      // console.log("exhibits", exhibits);
-      // }
     } catch (error) {
       setErrorMessage("An error occurred while generating the image");
       setIsLoading(false);
