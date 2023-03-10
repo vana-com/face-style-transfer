@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { vanaApiPost } from "vanaApi";
+import { vanaApiGet, vanaApiPost } from "vanaApi";
 import { LoginHandler } from "components/auth/LoginHandler";
 import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
@@ -86,18 +86,37 @@ export default function Interactive() {
     setErrorMessage("");
 
     const targetTokenPrompt = prompt
-      .replace(/\[your subject]/g, "{target_token}")
+      .replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
       .trim();
 
     try {
       console.log("About to call API");
-      const urls = await vanaApiPost(`images/generations`, {
-        prompt: targetTokenPrompt,
-        n: 4,
-      });
-      console.log("urls", urls);
-      setGeneratedImages(urls);
+      const account = await vanaApiGet("account");
+
+      // Before running generations/images, we need need to train a new LoRA model using the POST personalizations/images endpoint
+      if (account.success) {
+        // Once the model is trained, we can run generations/images
+        const generations = await vanaApiPost("generations/images", {
+          exhibitName: "Learn Prompt Engineering",
+          prompt: targetTokenPrompt, // "A watercolor painting of <1>",
+        });
+        console.log("generations", generations);
+
+        // if (generations.success) {
+        const outputs = await vanaApiGet("generations/images", {
+          exhibitName: "Learn Prompt Engineering",
+        });
+        const urls = outputs
+          .find((d) => d.name === "Learn Prompt Engineering")
+          .images.map((d) => d.url);
+        setGeneratedImages(urls);
+      }
+
+      // try {
+      // const exhibits = await vanaApiGet("account/exhibits");
+      // console.log("exhibits", exhibits);
+      // }
     } catch (error) {
       setErrorMessage("An error occurred while generating the image");
       setIsLoading(false);
@@ -110,6 +129,8 @@ export default function Interactive() {
     if (images.length === 0) return;
     console.log("Running image", images[0].fileUrl);
     setImageUrl(images[0].fileUrl);
+
+    console.log("going to make prediction", process.env.REPLICATE_API_TOKEN);
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
@@ -219,6 +240,8 @@ export default function Interactive() {
         Upload an image of your desired style. Then, create a brand new portrait
         of yourself (or {DEFAULT_PERSON}) in this style!
       </h2>
+      {/* <LoginHandler setUser={setUser} />
+      <button onClick={generatePersonalizedImages}>test</button> */}
       <div className="image-uploader-form text-center">
         {!imageUrl && (
           <>
