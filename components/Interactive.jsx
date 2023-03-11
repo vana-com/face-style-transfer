@@ -502,13 +502,25 @@ export default function Interactive() {
                             </div>
                           )}
                           {/* {isLoading && <p>Loading...</p>} */}
-                          {errorMessage && <p>Error: {errorMessage}</p>}
+                          {errorMessage && (
+                            <p className="text-center text-sm font-light text-red-600 mt-2 leading-snug">
+                              Error: {errorMessage}
+                            </p>
+                          )}
                           {/* User doesn't have a trained model*/}
                           {user.loggedIn && user.exhibits.length === 0 && (
-                            <p>
+                            <p className="text-center text-sm font-light text-gray-600 mt-2 leading-snug">
                               Unfortunately, you haven't created a personalized
                               Vana Portrait model yet. Go to
-                              https://portrait.vana.com/create to create one 🙂
+                              <a
+                                href="https://portrait.vana.com/create"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-blue-500 hover:underline hover:underline-offset-4"
+                              >
+                                https://portrait.vana.com/create
+                              </a>{" "}
+                              to create one 🙂
                             </p>
                           )}
                         </div>
