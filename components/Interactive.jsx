@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { vanaApiPost } from "vanaApi";
+import { vanaApiGet, vanaApiPost } from "vanaApi";
 import { LoginHandler } from "components/auth/LoginHandler";
 import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
@@ -85,19 +85,51 @@ export default function Interactive() {
     setIsLoading(true);
     setErrorMessage("");
 
+    // const TESTING_PROMPT =
+    //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
+
     const targetTokenPrompt = prompt
-      .replace(/\[your subject]/g, "{target_token}")
+      .replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
       .trim();
 
     try {
       console.log("About to call API");
-      const urls = await vanaApiPost(`images/generations`, {
-        prompt: targetTokenPrompt,
-        n: 4,
-      });
-      console.log("urls", urls);
-      setGeneratedImages(urls);
+      const account = await vanaApiGet("account");
+
+      // Before running generations/images, we need need to train a new LoRA model using the POST personalizations/images endpoint
+      if (account.success) {
+        // Once the model is trained, we can run generations/images
+        const generations = await vanaApiPost("generations/images", {
+          exhibitName: "Learn Prompt Engineering",
+          prompt: targetTokenPrompt, // "A watercolor painting of <1>",
+        });
+        console.log("generations", generations);
+
+        // Polling for the status of the generation job
+        // Every 1000 seconds, hit 'jobs' endpoint to check the status of the job
+        let job = await vanaApiGet(`jobs/${generations.jobId}`);
+        while (!job.job.statuses?.some((d) => d.status === "SUCCESS")) {
+          await sleep(1000);
+          job = await vanaApiGet(`jobs/${generations.jobId}`);
+          console.log(
+            "Has finished job:",
+            job.job.statuses.map((d) => d.status).some((d) => d === "SUCCESS")
+          );
+        }
+
+        // Once the job is complete, hit 'generations/images' endpoint to get the images
+        if (job.job.statuses.some((d) => d.status === "SUCCESS")) {
+          const output = await vanaApiGet("generations/images", {
+            exhibitName: "Learn Prompt Engineering",
+          });
+          const urls = output.exhibits
+            .find((d) => d.name === "Learn Prompt Engineering")
+            .images.map((d) => ({ url: d.url }));
+          console.log("urls", urls);
+          setGeneratedImages(urls);
+        }
+      }
     } catch (error) {
       setErrorMessage("An error occurred while generating the image");
       setIsLoading(false);
@@ -110,6 +142,7 @@ export default function Interactive() {
     if (images.length === 0) return;
     console.log("Running image", images[0].fileUrl);
     setImageUrl(images[0].fileUrl);
+
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
@@ -189,9 +222,8 @@ export default function Interactive() {
           return;
         }
       }
-      const formattedUrls = {
-        data: multi.output.map((imageUrl) => ({ url: imageUrl })),
-      };
+
+      const formattedUrls = multi.output.map((imageUrl) => ({ url: imageUrl }));
       setGeneratedImages(formattedUrls);
       setIsLoading(false);
     },
@@ -219,6 +251,8 @@ export default function Interactive() {
         Upload an image of your desired style. Then, create a brand new portrait
         of yourself (or {DEFAULT_PERSON}) in this style!
       </h2>
+      {/* <LoginHandler setUser={setUser} />
+      <button onClick={generatePersonalizedImages}>test</button> */}
       <div className="image-uploader-form text-center">
         {!imageUrl && (
           <>
@@ -362,12 +396,10 @@ export default function Interactive() {
 
                 {imageCaption &&
                 prediction.status == "succeeded" &&
-                generatedImages?.data?.length > 0 ? (
+                generatedImages?.length > 0 ? (
                   <>
                     <img
-                      src={
-                        selectedGeneratedImage || generatedImages?.data[0].url
-                      }
+                      src={selectedGeneratedImage || generatedImages[0].url}
                       alt="Uploaded Image"
                       layout="position"
                       className={classNames(
@@ -378,7 +410,7 @@ export default function Interactive() {
                       }}
                     />
                     <div className="mt-2 flex flex-row gap-1">
-                      {generatedImages?.data?.map((image, i) => (
+                      {generatedImages?.slice(0, 4).map((image, i) => (
                         <div
                           className={classNames(
                             "flex-1 aspect-square cursor-pointer hover:scale-105 transition hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 rounded overflow-hidden",
@@ -470,13 +502,25 @@ export default function Interactive() {
                             </div>
                           )}
                           {/* {isLoading && <p>Loading...</p>} */}
-                          {errorMessage && <p>Error: {errorMessage}</p>}
+                          {errorMessage && (
+                            <p className="text-center text-sm font-light text-red-600 mt-2 leading-snug">
+                              Error: {errorMessage}
+                            </p>
+                          )}
                           {/* User doesn't have a trained model*/}
                           {user.loggedIn && user.exhibits.length === 0 && (
-                            <p>
+                            <p className="text-center text-sm font-light text-gray-600 mt-2 leading-snug">
                               Unfortunately, you haven't created a personalized
                               Vana Portrait model yet. Go to
-                              https://portrait.vana.com/create to create one 🙂
+                              <a
+                                href="https://portrait.vana.com/create"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-blue-500 hover:underline hover:underline-offset-4"
+                              >
+                                https://portrait.vana.com/create
+                              </a>{" "}
+                              to create one 🙂
                             </p>
                           )}
                         </div>

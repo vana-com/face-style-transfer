@@ -31,11 +31,13 @@ export const LoginHandler = ({ setUser }) => {
             balancePromise,
           ]);
 
+        console.log({ exhibitsResponse, textToImageResponse, balanceResponse });
+
         const newUser = {
           balance: balanceResponse?.balance ?? 0,
           exhibits: exhibitsResponse?.exhibits ?? [],
           textToImage: textToImageResponse?.urls ?? [],
-          loggedIn: true
+          loggedIn: true,
         };
 
         setUser(newUser);

@@ -24,7 +24,6 @@ export default function FixedImage({ step, src, alt }) {
   });
 
   useEffect(() => {
-    console.log("step changed to", step);
     if (step === 0) {
       //   imageTranslateY.set(0);
       imageOpacity.set(1);

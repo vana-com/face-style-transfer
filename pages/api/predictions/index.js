@@ -15,6 +15,7 @@ export default async function handler(req, res) {
   if (response.status !== 201) {
     let error = await response.json();
     res.statusCode = 500;
+    console.log(error);
     res.end(JSON.stringify({ detail: error.detail }));
     return;
   }
