@@ -19,18 +19,19 @@ export const LoginHandler = ({ setUser }) => {
 			const authToken = localStorage?.authToken ?? undefined;
 			if (authToken) {
 				const [exhibitsPromise, balancePromise] = [
-					vanaApiGet("account/exhibits"),
+					vanaApiGet("personalizations/images"),
 					vanaApiGet("account/balance"),
 				];
 
 				const [exhibitsResponse, balanceResponse] = await Promise.all([
 					exhibitsPromise,
 					balancePromise,
-				]); // console.log({ exhibitsResponse, balanceResponse });
+				]);
+				// console.log({ exhibitsResponse, balanceResponse });
 
 				const newUser = {
+					exhibits: exhibitsResponse?.files ?? [],
 					balance: balanceResponse?.balance ?? 0,
-					exhibits: exhibitsResponse?.exhibits ?? [],
 					loggedIn: true,
 				};
 

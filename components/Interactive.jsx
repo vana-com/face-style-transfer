@@ -98,12 +98,10 @@ export default function Interactive() {
 
       if (account.success) {
         // Once the model is trained, we can run generations/images
-        const generations = await vanaApiPost(
-          "generations/images?exhibitName=Learn Prompt Engineering&maxImagesPerExhibit=4",
-          {
-            prompt: targetTokenPrompt, // "A watercolor painting of <1>",
-          }
-        );
+        const generations = await vanaApiPost("generations/images", {
+          exhibitName: "Learn Prompt Engineering",
+          prompt: targetTokenPrompt, // "A watercolor painting of <1>",
+        });
         // console.log("generations", generations);
 
         // Polling for the status of the generation job
@@ -120,17 +118,17 @@ export default function Interactive() {
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
         if (job.job.statuses.some((d) => d.status === "SUCCESS")) {
-          const output = await vanaApiGet("generations/images", {
-            exhibitName: "Learn Prompt Engineering",
-          });
-          const urls = output.exhibits
-            .find((d) => d.name === "Learn Prompt Engineering")
-            .images.map((d) => ({ url: d.url }));
+          const output = await vanaApiGet(
+            "generations/images?exhibitName=Learn Prompt Engineering&maxImagesPerExhibit=4"
+          );
+          // console.log("output", output);
+          const urls = output.exhibits[0].images.map((d) => ({ url: d.url }));
           // console.log("urls", urls);
           setGeneratedImages(urls);
         }
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage("An error occurred while generating the image");
       setIsLoading(false);
     }
