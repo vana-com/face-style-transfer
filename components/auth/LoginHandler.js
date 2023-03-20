@@ -31,7 +31,7 @@ export const LoginHandler = ({ setUser }) => {
             balancePromise,
           ]);
 
-        console.log({ exhibitsResponse, textToImageResponse, balanceResponse });
+        // console.log({ exhibitsResponse, textToImageResponse, balanceResponse });
 
         const newUser = {
           balance: balanceResponse?.balance ?? 0,

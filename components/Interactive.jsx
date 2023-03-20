@@ -94,7 +94,7 @@ export default function Interactive() {
       .trim();
 
     try {
-      console.log("About to call API");
+      // console.log("About to call API");
       const account = await vanaApiGet("account");
 
       // Before running generations/images, we need need to train a new LoRA model using the POST personalizations/images endpoint
@@ -104,7 +104,7 @@ export default function Interactive() {
           exhibitName: "Learn Prompt Engineering",
           prompt: targetTokenPrompt, // "A watercolor painting of <1>",
         });
-        console.log("generations", generations);
+        // console.log("generations", generations);
 
         // Polling for the status of the generation job
         // Every 1000 seconds, hit 'jobs' endpoint to check the status of the job
@@ -112,10 +112,10 @@ export default function Interactive() {
         while (!job.job.statuses?.some((d) => d.status === "SUCCESS")) {
           await sleep(1000);
           job = await vanaApiGet(`jobs/${generations.jobId}`);
-          console.log(
-            "Has finished job:",
-            job.job.statuses.map((d) => d.status).some((d) => d === "SUCCESS")
-          );
+          // console.log(
+          //   "Has finished job:",
+          //   job.job.statuses.map((d) => d.status).some((d) => d === "SUCCESS")
+          // );
         }
 
         // Once the job is complete, hit 'generations/images' endpoint to get the images
@@ -126,7 +126,7 @@ export default function Interactive() {
           const urls = output.exhibits
             .find((d) => d.name === "Learn Prompt Engineering")
             .images.map((d) => ({ url: d.url }));
-          console.log("urls", urls);
+          // console.log("urls", urls);
           setGeneratedImages(urls);
         }
       }
@@ -140,7 +140,7 @@ export default function Interactive() {
 
   const getImageCaption = async (images) => {
     if (images.length === 0) return;
-    console.log("Running image", images[0].fileUrl);
+    // console.log("Running image", images[0].fileUrl);
     setImageUrl(images[0].fileUrl);
 
     const response = await fetch("/api/predictions", {
@@ -178,7 +178,7 @@ export default function Interactive() {
       }
       setPrediction(prediction);
     }
-    console.log(multi);
+    // console.log(multi);
     setImageCaption(multi.output);
   };
 
