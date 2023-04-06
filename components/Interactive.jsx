@@ -88,7 +88,7 @@ export default function Interactive() {
     //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
 
     const targetTokenPrompt = prompt
-      .replace(/\[your subject]/g, "Nicolas Cage")
+      .replace(/\[your subject]/g, "<1>")
       .replaceAll("\n", " ")
       .trim();
 
@@ -236,6 +236,7 @@ export default function Interactive() {
   ];
 
   const [agreeToTOS, setAgreeToTOS] = useState(false);
+  const [wiggleTOS, setWiggleTOS] = useState(false);
 
   return (
     <div
@@ -257,70 +258,96 @@ export default function Interactive() {
             <div
               className={classNames(
                 "transition duration-200",
-                agreeToTOS ? "" : "opacity-50 cursor-not-allowed"
+                agreeToTOS ? "" : "cursor-not-allowed"
               )}
             >
-              <UploadButton
-                uploader={uploader}
-                options={options}
-                onComplete={getImageCaption}
-              >
-                {({ onClick }) => (
-                  <button
-                    onClick={onClick}
-                    disabled={!agreeToTOS}
-                    className="bg-blue-500 hover:bg-blue-700 transition text-white font-light py-2 px-4 rounded"
-                  >
-                    {/* Select image... */}
-                    Upload an image of the desired style
-                  </button>
+              <div
+                className={classNames(
+                  "transition",
+                  agreeToTOS ? "" : "opacity-40"
                 )}
-              </UploadButton>
-              <h2 className="text-md font-light mt-4 text-center mb-2">
-                (or select one)
-              </h2>
-              <div className="flex flex-row flex-wrap justify-center gap-2">
-                {DEFAULT_IMAGES.map((image) => (
-                  <div
-                    className="cursor-pointer hover:scale-105 transition hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 rounded overflow-hidden"
-                    key={image}
-                    onClick={() => {
-                      if (!agreeToTOS) return;
-                      getImageCaption([{ fileUrl: `${BASE_URL}/${image}` }]);
-                    }}
+                onMouseOver={() => {
+                  if (!agreeToTOS) {
+                    setWiggleTOS(true);
+                  }
+                }}
+                onMouseOut={() => {
+                  if (!agreeToTOS) {
+                    setWiggleTOS(false);
+                  }
+                }}
+              >
+                <div className={agreeToTOS ? "" : "pointer-events-none"}>
+                  <UploadButton
+                    uploader={uploader}
+                    options={options}
+                    onComplete={getImageCaption}
                   >
-                    <img
-                      src={image}
-                      alt="Default Image"
-                      className="w-32 h-32 object-cover"
-                      style={{
-                        boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.1)",
-                      }}
-                    />
+                    {({ onClick }) => (
+                      <button
+                        onClick={onClick}
+                        disabled={!agreeToTOS}
+                        className="bg-blue-500 hover:bg-blue-700 transition text-white font-light py-2 px-4 rounded"
+                      >
+                        {/* Select image... */}
+                        Upload an image of the desired style
+                      </button>
+                    )}
+                  </UploadButton>
+                  <h2 className="text-md font-light mt-4 text-center mb-2">
+                    (or select one)
+                  </h2>
+                  <div className="flex flex-row flex-wrap justify-center gap-2">
+                    {DEFAULT_IMAGES.map((image) => (
+                      <div
+                        className="cursor-pointer hover:scale-105 transition hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 rounded overflow-hidden"
+                        key={image}
+                        onClick={() => {
+                          if (!agreeToTOS) return;
+                          getImageCaption([
+                            { fileUrl: `${BASE_URL}/${image}` },
+                          ]);
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt="Default Image"
+                          className="w-32 h-32 object-cover"
+                          style={{
+                            boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.1)",
+                          }}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-row gap-1 mt-6 justify-center">
-              <label className="text-md font-light text-gray-500 cursor-pointer select-none flex items-center">
-                <input
-                  type="checkbox"
-                  checked={agreeToTOS}
-                  onChange={(e) => {
-                    setAgreeToTOS(e.target.checked);
-                  }}
-                  className="mr-2 cursor-pointer"
-                />
-                I agree to the{" "}
-                <a
-                  href="https://www.vana.com/terms-of-service"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="ml-1 text-blue-500 hover:underline hover:underline-offset-4"
-                >
-                  Vana Terms of Service
-                </a>
-              </label>
+              <div
+                className={classNames(
+                  "flex flex-row gap-1 mt-6 justify-center",
+                  wiggleTOS ? "animate-wiggle" : ""
+                )}
+              >
+                <label className="text-md font-light text-gray-500 cursor-pointer select-none flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={agreeToTOS}
+                    onChange={(e) => {
+                      setAgreeToTOS(e.target.checked);
+                    }}
+                    className="mr-2 cursor-pointer"
+                  />
+                  I agree to the{" "}
+                  <a
+                    href="https://www.vana.com/terms-of-service"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="ml-1 text-blue-500 hover:underline hover:underline-offset-4"
+                  >
+                    Vana Terms of Service
+                  </a>
+                </label>
+              </div>
             </div>
           </>
         )}
