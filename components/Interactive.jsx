@@ -88,7 +88,7 @@ export default function Interactive() {
     //   "a portrait of [your subject] in the style of a painting of a person with a green apple in their mouth, by Rene Magritte, by René Magritte, rene margritte, rene magritte. hyperdetailed, ( ( ( surrealism ) ) ), rene magritte. detailed, magritte painting, style of rene magritte, magritte, surrealism aesthetic";
 
     const targetTokenPrompt = prompt
-      .replace(/\[your subject]/g, "<1>")
+      .replace(/\[your subject]/g, "Nicolas Cage")
       .replaceAll("\n", " ")
       .trim();
 
@@ -239,10 +239,10 @@ export default function Interactive() {
 
   return (
     <div
-      className="bg-white min-h-screen py-2 px-4 mx-auto flex flex-col justify-center"
+      className="bg-white min-h-screen py-12 px-4 mx-auto flex flex-col justify-center"
       id="interactive"
     >
-      <h1 className="text-4xl font-bold text-center mb-8">
+      <h1 className="text-4xl font-bold text-center mb-4">
         Try it out for yourself 👇
       </h1>
       <h2 className="mx-auto px-4 max-w-[568px] text-xl font-light text-gray-500 text-center mb-8">

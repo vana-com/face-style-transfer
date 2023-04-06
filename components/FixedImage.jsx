@@ -83,20 +83,15 @@ export default function FixedImage({ step, src, alt }) {
           step >= 1 && step < 6 ? "opacity-100" : "opacity-0"
         )}
       >
-        <RightWord step={step}>a close up of a painting of a woman</RightWord>,{" "}
-        <RightWord step={step}>painting of mona lisa</RightWord>,{" "}
-        <RightWord step={step}>leonardo da vinci painting</RightWord>,{" "}
-        <RightWord step={step}>artist leonardo davinci</RightWord>,{" "}
-        <RightWord step={step}>mona lisa</RightWord>,{" "}
-        <WrongWord step={step}>cave painting of the mona lisa</WrongWord>,{" "}
-        <RightWord step={step}>monalisa</RightWord>,{" "}
-        <WrongWord step={step}>cave painting of mona lisa</WrongWord>,{" "}
-        <RightWord step={step}>by Leonardo da Vinci</RightWord>,{" "}
-        <RightWord step={step}>restored painting</RightWord>,{" "}
-        <WrongWord step={step}>mona lisa with a mustache</WrongWord>,{" "}
-        <RightWord step={step}>da vinci painting</RightWord>,{" "}
-        <RightWord step={step}>((the mona lisa))</RightWord>,{" "}
-        <RightWord step={step}>mona lisa as a real person</RightWord>
+        <RightWord step={step}>
+          a painting of a person with fruit and vegetables on their head, by
+          Giuseppe Arcimboldo, arcimboldo giuseppe, giuseppe arcimboldo
+        </RightWord>{" "}
+        <WrongWord step={step}>walter white</WrongWord>,{" "}
+        <RightWord step={step}>
+          inspired by Giuseppe Arcimboldo, by Arcimboldo, inspired by
+          Arcimboldo, by Lucas Cranach the Younger, by Lucas Cranach the Elder
+        </RightWord>
       </p>
     </div>
   );

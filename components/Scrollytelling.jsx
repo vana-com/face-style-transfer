@@ -14,8 +14,12 @@ export default function Scrollytelling() {
         <ScrollytellingOne step={step} setStep={setStep} />
         <FixedImage
           step={step}
-          src={step >= 5 ? "/images/mona-nick-cage.png" : "/images/mona.jpg"}
-          alt={"Mona Lisa"}
+          src={
+            step >= 5
+              ? "/images/vertumnus-nick-cage.png"
+              : "/images/vertumnus-square.jpg"
+          }
+          alt={"Vertumnus"}
         />
       </div>
       <MainProse />
@@ -23,8 +27,12 @@ export default function Scrollytelling() {
         <ScrollytellingTwo step={step} setStep={setStep} />
         <FixedImage
           step={step}
-          src={step >= 5 ? "/images/mona-nick-cage.png" : "/images/mona.jpg"}
-          alt={"Mona Lisa"}
+          src={
+            step >= 5
+              ? "/images/vertumnus-nick-cage.png"
+              : "/images/vertumnus-square.jpg"
+          }
+          alt={"Vertumnus"}
         />
       </div>
     </>

@@ -16,7 +16,7 @@ export default function MonaLisaImageSelector() {
       >
         {[1, 2, 3, 4].map((n) => (
           <Image
-            src={`/images/mona-lisa-dalle-${n}.png`}
+            src={`/images/vertumnus-dalle-${n}.png`}
             fill
             className={classNames(
               number === n ? "opacity-100" : "opacity-0",
@@ -76,7 +76,7 @@ export default function MonaLisaImageSelector() {
         </button>
       </div>
       <span className="font-light text-sm text-gray-500 text-right ml-auto block mt-2">
-        You weren&apos;t expecting the real Mona Lisa, were you?
+        You weren&apos;t expecting the real Vertumnus, were you?
       </span>
     </div>
   );
