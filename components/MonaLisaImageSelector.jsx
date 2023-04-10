@@ -16,7 +16,9 @@ export default function MonaLisaImageSelector() {
       >
         {[1, 2, 3, 4].map((n) => (
           <Image
+            key={n}
             src={`/images/vertumnus-dalle-${n}.png`}
+            alt="Image of Nic Cage in the style of Vertumnus"
             fill
             className={classNames(
               number === n ? "opacity-100" : "opacity-0",
