@@ -253,7 +253,7 @@ export default function Interactive() {
       </h1>
       <h2 className="mx-auto px-4 max-w-[568px] text-xl font-light text-gray-500 text-center mb-8">
         Upload an image of your desired style. Then, create a brand new portrait
-        of yourself (or {DEFAULT_PERSON}) in this style!
+        of yourself (or a celebrity) in this style!
       </h2>
       {/* <LoginHandler setUser={setUser} />
       <button onClick={generatePersonalizedImages}>test</button> */}
