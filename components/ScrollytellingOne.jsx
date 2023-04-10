@@ -12,7 +12,8 @@ export default function ScrollytellingOne({ step, setStep }) {
           <StepContent centered>
             <StepTitle>This is an image.</StepTitle>
             <ParagraphText>
-              You may recognize it as the "Mona Lisa."
+              You may recognize it as "Vertumnus", an oil painting created by
+              Giuseppe Arcimboldo in 1591.
             </ParagraphText>
           </StepContent>
         </IntersectionObserver>
@@ -22,7 +23,7 @@ export default function ScrollytellingOne({ step, setStep }) {
           <StepContent>
             <ParagraphText>
               For a human, recognizing this image is a simple task. But how does
-              a computer recognize the Mona Lisa?
+              a computer recognize Vertumnus?
             </ParagraphText>
             <ParagraphText>
               Consider the overlayed, computer-generated text description, which
@@ -44,14 +45,15 @@ export default function ScrollytellingOne({ step, setStep }) {
         <IntersectionObserver onIntersect={() => setStep(2)}>
           <StepContent>
             <ParagraphText>
-              There are some things that the computer can see, like the fact
-              that this is a close up painting. It also knows, thanks to its
-              training, that this is in fact a famous painting of Mona Lisa.
+              There are some things that the computer can recognize, like the
+              fact that the painting's subject has fruits and vegetables on his
+              head, and that the portrait was painted by Giuseppe Arcimboldo.
             </ParagraphText>
             <ParagraphText>
               But there are some things the model{" "}
               <span className="font-bold text-red-700">gets wrong</span>, like
-              its assumption that this painting took place in a cave.
+              its guess that Arcimboldo's subject was Breaking Bad's Walter
+              White.
             </ParagraphText>
           </StepContent>
         </IntersectionObserver>
