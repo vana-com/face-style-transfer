@@ -585,8 +585,9 @@ export default function Interactive() {
             {showGoogleFormLink && (
               <div className="flex flex-col gap-2 mt-8">
                 <p className="text-center text-lg font-light text-gray-600 mb-px leading-snug">
-                  👋 We&apos;d like to reward you for reading this essay. Please
-                  fill out{" "}
+                  You made it to the end! You're a Prompt Engineer in the
+                  making. 💫 We'd like to reward you with 20 credits for your
+                  effort, just fill out{" "}
                   <a
                     href="https://docs.google.com/forms/d/e/1FAIpQLSe7aA2K41pO7JHqwHeaCIcNgzrS0NfpdE1cUT8hENtrNlD2ig/formResponse"
                     target="_blank"
@@ -595,7 +596,7 @@ export default function Interactive() {
                   >
                     this form
                   </a>{" "}
-                  for 20 free Vana credits!
+                  to claim them. 💚
                 </p>
               </div>
             )}
