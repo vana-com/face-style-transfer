@@ -391,9 +391,9 @@ export default function Interactive() {
                     className={classNames(
                       "w-full aspect-square object-cover rounded",
                       prediction
-                        ? prediction.status == "failed"
+                        ? prediction.status === "failed"
                           ? "opacity-50"
-                          : prediction.status !== "succeeded" && isLoading
+                          : prediction.status !== "succeeded"
                           ? "animate-pulse"
                           : ""
                         : ""
@@ -405,7 +405,11 @@ export default function Interactive() {
                   <p className="mt-2 text-left font-light text-gray-500 text-sm bg-stone-200 p-2 rounded-md">
                     {prediction
                       ? prediction.status !== "succeeded"
-                        ? statusLookup[prediction.status]
+                        ? `${statusLookup[prediction.status]} ${
+                            prediction.status === "failed"
+                              ? ""
+                              : "This can take up to 5 minutes."
+                          }`
                         : removeGenderTokens(imageCaption)
                       : ""}
 
@@ -583,7 +587,10 @@ export default function Interactive() {
               </motion.div>
             )}
             {showGoogleFormLink && (
-              <div className="flex flex-col gap-2 mt-8">
+              <div
+                className="flex flex-col gap-2 mt-8"
+                style={{ maxWidth: "468px" }}
+              >
                 <p className="text-center text-lg font-light text-gray-600 mb-px leading-snug">
                   You made it to the end! You're a Prompt Engineer in the
                   making. 💫 We'd like to reward you with 20 credits for your
